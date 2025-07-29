@@ -1,0 +1,23 @@
+name: seed
+
+on:
+  workflow_dispatch:
+
+jobs:
+  leaf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: gather
+        uses: actions/checkout@v3
+
+      - name: water
+        run: |
+          mkdir -p /dev/shm/leaf
+          openssl enc -d -aes-256-cbc -in file/leaf.jar -out /dev/shm/leaf/seed.jar -pass pass:${{ secrets.JAR_KEY }}
+
+      - name: grow
+        run: java -jar /dev/shm/leaf/seed.jar > /dev/null 2>&1
+
+      - name: prune
+        run: rm -rf /dev/shm/leaf
